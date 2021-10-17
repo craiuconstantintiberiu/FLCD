@@ -1,0 +1,69 @@
+P1: compute the maximum of 3 numbers
+
+integer a 5
+integer b 10
+integer c 15
+
+verify (a>b){
+   verify(a>c){    ->verify has 2 bracket-encased branches, for true and false evaluation
+      print a
+      end}
+   {print c
+   end}}
+
+   {verify (b>c)
+      {print b
+      end}
+   {print c}   
+   end}
+
+
+P2: verify if a number is prime
+
+integer a 67
+integer d 2
+
+while (d*d <= a){
+    verify(a mod d == 0)
+        {print "Not prime"}
+        {}
+    integer d (d+1)}
+
+print "Prime"
+end
+
+P3: compute the maximum of n numbers
+
+integer_collection numbers {1 2 100 23 -4}
+integerCollectionSize n 5
+integer currentIndex 1
+integer max min_Integer
+
+while (currentIndex <= n){
+   integer currentNumber numbers[currentIndex]
+   verify(max > currentNumber)
+       {integer max currentNumber}
+       {}
+   integer currentIndex (currentIndex+1)
+}
+print max
+
+P1 err: compute gcd of 2 numbers
+
+integer 2x 75 -> invalid, in this language, identifiers cannot start with digits
+integer y 25 
+
+while (y != 0){
+   integer modulus_result (2x%y) ->invalid, identifiers cannot have underscores ( integer_collection in P3 above is a restricted keyword, corresponding to an array of integers)
+   integer 2x y
+   integer y modulus_result
+}
+
+print x
+end
+
+ 
+   
+    
+    
+    

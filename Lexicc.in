@@ -1,0 +1,45 @@
+Lexic:
+
+Alphabet:
+-Upper(A-Z) and lower case letters (a-z) of the English alphabet
+-Underline character '_'
+-Decimal digits(0-9)
+
+Lexic:
+-Special symbols, representing :
+   -operators + - * / < <= = > >= % != ==
+   -separators [] {} : ; space , .
+   -reserved words integer while verify print end collection read char string float boolean integer_collection
+   
+b. identifiers
+  -a sequence of letters and digits, such that the first character is a letter; the rule is:
+
+    identifier = letter | (letter {(letter|digit)} )
+
+    letter= "A" | "B" | . ..| "Z" | "a" | ... | "z"
+
+    digit = "0" | "1" |...| "9"
+	
+c.constants:
+1. integer- rule:
+	integer = "0" | ("+" | "-" ) nonNullNumberWithoutLeadingZeros | nonNullNumberWithoutLeadingZeros
+	nonNullNumberWithoutLeadingZeros = {nonZeroDigit}
+	nonZeroDigit = (digit - "0")
+	
+2. float-rule:
+    float = ("0" | nonNullNumberWithoutLeadingZeros) floatingPart
+    floatingPart = "." {digit}
+   	nonNullNumberWithoutLeadingZeros = {nonZeroDigit}
+	nonZeroDigit = (digit - "0")
+	
+3. boolean-rule:
+   boolean = "true" | "false"
+   
+4. character-rule:
+   character = '(digit | letter| separator)'
+
+5. string:
+   constchar="string"
+   string:char{string}
+   char=letter|digit
+   

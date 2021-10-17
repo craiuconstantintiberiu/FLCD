@@ -1,0 +1,32 @@
+Syntax:
+The words - predefined tokens are specified between " and ":
+
+declaration = (typePredefined " " IDENTIFIER " " expression) | userDefinedCollecctionDecl
+userDefinedCollecctionDecl = typeUserDefined ("[" integer "]" ) | ("{" expression "}")  | ("{" expression (" " expression)* "}") 
+
+expression = expression ("*" | "/" | "%" | "+" | "-") term | term
+term = term ("*" | "/" | "%" | "+" | "-") factor | factor
+factor =( ( "(" expression ")" ) | expression ) | IDENTIFIER
+
+type = typePredefined | typeUserDefined
+typePredefined = "boolean" | "char" | "integer" | "float" | "string" | "integer_collection"
+typeUserDefined = "collection" " " typePredefined
+userDefinedCollectionAccess = IDENTIFIER "[" integer "]"
+
+ioStmt = ("read" IDENTIFIER)  | "print" (IDENTIFIER | expression) 
+
+program = structsmt returnValue
+returnValue = "end" | "end"  expression
+structsmt = stmtlist | ifstmt | whilestmt
+stmtlist = stmt | (stmt ";" stmtlist) 
+stmt = simplstmt | structsmt
+simplstmt = assignstmt | ioStmt
+assignstmt = declaration | assignUserDefinedCollection
+assignUserDefinedCollection = userDefinedCollectionAccess " " expression
+
+ifstmt = "verify" "(" condition ")" "{" true-branch "}" "{" false-branch "}"
+true- branch = stmt
+false-branch = stmt
+whilestmt = "while" "(" condition ")" "{" stmt "}"
+condition = expression RELATION expression
+RELATION = "<" | "<=" | "==" | ">="| ">" | "!="
