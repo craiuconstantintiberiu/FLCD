@@ -16,12 +16,17 @@ Deterministic Checker: Checks if an automata is deterministic.
 Has a method isDeterministic that checks if an automata is deterministic or non-deterministic and prints the result. If non-deterministic,
 it also specifies the reason.
 
+SequenceVerifier: checks if a sequence is accepted by a certain DFA.
+Has a method, verifySequence that takes a sequence(List<String>) and an automata and checks if ,starting from the initial state, the sequence is accepted. Prints and returns the result.
+
+
 Menu: Receives an automata and, based on user input, prints the alphabet/states/final states/ transitions/ determinism status based on user input.
 Has a method runMenu that starts the menu which informs the user of the choices he has related to printing information about the automata.
 
 FA:
-automata ::= alphabet newline states newline finalStates newline transitions
+automata ::= alphabet newline initialState newline states newline finalStates newline transitions
 alphabet ::= identifier | (identifier,alphabet)
+initialState ::= identifier
 states ::= identifier | (identifier,states)
 finalStates ::= identifier | (identifier,finalStates)
 transitions ::= identifier identifier identifier | (identifier identifier identifier,transitions)
