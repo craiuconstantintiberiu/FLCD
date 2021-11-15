@@ -1,0 +1,29 @@
+Documentation:
+https://github.com/craiuconstantintiberiu/FLCD/tree/main/Lab4
+
+Automata: Is a class that represents the automata. It contains :
+- the alphabet (represented as a list)
+- the states (represented as a list)
+- the final states (represented as a list)
+- the transitions (represented as a list of pairs - the first element is a pair of the source and a letter
+    from the alphabet and the second is the destination)
+
+Automata Reader: Deals with reading the automata from file.
+Has a method readAutomata, that reads an automata from file and returns it. The automata must strictly adhere to the EBNF model, defined below.
+Otherwise, unexpected behaviour may occur.
+
+Deterministic Checker: Checks if an automata is deterministic.
+Has a method isDeterministic that checks if an automata is deterministic or non-deterministic and prints the result. If non-deterministic,
+it also specifies the reason.
+
+Menu: Receives an automata and, based on user input, prints the alphabet/states/final states/ transitions/ determinism status based on user input.
+Has a method runMenu that starts the menu which informs the user of the choices he has related to printing information about the automata.
+
+FA:
+automata ::= alphabet newline states newline finalStates newline transitions
+alphabet ::= identifier | (identifier,alphabet)
+states ::= identifier | (identifier,states)
+finalStates ::= identifier | (identifier,finalStates)
+transitions ::= identifier identifier identifier | (identifier identifier identifier,transitions)
+identifier ::= character | (character identifier)
+character ::= 0|1|...|9|A|..|Z|a..|z
