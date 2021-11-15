@@ -17,6 +17,11 @@ public class AutomataReader {
         System.out.println(Arrays.toString(elements));
         automata.alphabet.addAll(List.of(elements));
 
+        //Read initialState:
+        currentLine = reader.readLine();
+        System.out.println(currentLine);
+        automata.initialState = currentLine;
+
         //Read states:
         currentLine = reader.readLine();
         elements = currentLine.split(",");

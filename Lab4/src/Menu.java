@@ -6,20 +6,27 @@ public class Menu {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("1. Print alphabet");
-            System.out.println("2. Print states");
-            System.out.println("3. Print final states");
-            System.out.println("4. Print transitions");
-            System.out.println("5. Check if deterministic");
+            System.out.println("2. Print initial state");
+            System.out.println("3. Print states");
+            System.out.println("4. Print final states");
+            System.out.println("5. Print transitions");
+            System.out.println("6. Check if deterministic");
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1" -> printAlphabet(automata);
-                case "2" -> printStates(automata);
-                case "3" -> printFinalStates(automata);
-                case "4" -> printTransitions(automata);
-                case "5" -> DeterministicChecker.isDeterministic(automata);
+                case "2" -> printInitialState(automata);
+                case "3" -> printStates(automata);
+                case "4" -> printFinalStates(automata);
+                case "5" -> printTransitions(automata);
+                case "6" -> DeterministicChecker.isDeterministic(automata);
                 default -> System.out.println("Choose again.");
             }
         }
+    }
+
+    private static void printInitialState(Automata automata) {
+        System.out.println("Initial state:");
+        System.out.println(automata.initialState);
     }
 
     private static void printFinalStates(Automata automata) {
