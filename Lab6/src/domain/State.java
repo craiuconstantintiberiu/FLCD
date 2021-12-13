@@ -5,13 +5,21 @@ import java.util.List;
 import java.util.Objects;
 
 public class State {
-    public List<Pair<String, String>> productions;
+    public List<Pair<String, List<String>>> productions;
+
+    public State(List<Pair<String, List<String>>> productions) {
+        this.productions = productions;
+    }
 
     public State() {
         productions = new ArrayList<>();
     }
 
-    public State(List<Pair<String,String>> productions) {
+    public List<Pair<String, List<String>>> getProductions() {
+        return productions;
+    }
+
+    public void setProductions(List<Pair<String, List<String>>> productions) {
         this.productions = productions;
     }
 

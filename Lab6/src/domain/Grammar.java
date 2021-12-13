@@ -40,16 +40,21 @@ public class Grammar {
 
         //Read productions
         currentLine = reader.readLine();
-        elements = currentLine.split(",");
-        var productions = Arrays.stream(elements).map(elems -> elems.split(" ")).collect(Collectors.toList());
+        elements = currentLine.split(";");
+        var productions = Arrays.stream(elements)
+                .map(elems -> elems.split(" "))
+                .collect(Collectors.toList());
         for (String[] production : productions) {
             var firstElemProduction = production[0];
             List<String> productionElems = new ArrayList<>();
-            IntStream.range(1, production.length).forEach(index -> productionElems.add(production[index]));
-            grammar.getProductions().add(new Pair<>(firstElemProduction, productionElems));
+            for (int i = 1; i < production.length; i++) {
+                List<String> elementsOfProduction = Arrays.stream(production[i].split(",")).toList();
+                grammar.getProductions().add(new Pair<>(firstElemProduction, elementsOfProduction));
+            }
         }
 
         //Read start:
+
         currentLine = reader.readLine();
         grammar.setStart(currentLine);
 
@@ -112,7 +117,7 @@ public class Grammar {
         for (var production : productions) {
             builder.append(production.getFirst())
                     .append("->")
-                    .append(String.join("|", production.getSecond()))
+                    .append(String.join("", production.getSecond()))
                     .append("\n");
         }
         System.out.println(builder);
@@ -120,22 +125,16 @@ public class Grammar {
 
     public void printProductionsForGivenNonterminal(String nonterminal) {
         System.out.println("Productions for nonterminal:" + nonterminal);
-        var productionsMatching = productions.stream().filter(prod -> prod.getFirst().equals(nonterminal)).collect(Collectors.toList());
+        var productionsMatching = getProductionsForGivenNonterminal(nonterminal);
         if (productionsMatching.isEmpty()) {
             System.out.println("No matching nonterminal");
             return;
         }
-        var production = productionsMatching.get(0);
-
-        String builder = production.getFirst() +
-                "->" +
-                String.join("|", production.getSecond()) +
-                " ";
-        System.out.println(builder);
+        System.out.println(productionsMatching.stream().map(e->e.first+"->"+e.second).collect(Collectors.joining(",")));
     }
 
-    public List<String> getProductionsForGivenNonterminal(String nonTerminal) {
-        return productions.stream().filter(prod->prod.getFirst().equals(nonTerminal)).map(prod->prod.second).collect(Collectors.toList()).get(0);
+    public List<Pair<String, List<String>>> getProductionsForGivenNonterminal(String nonTerminal) {
+        return productions.stream().filter(prod->prod.getFirst().equals(nonTerminal)).collect(Collectors.toList());
     }
 
 }
