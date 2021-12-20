@@ -1,7 +1,3 @@
-import domain.Grammar;
-import domain.Pair;
-import domain.State;
-
 import java.util.*;
 
 public class Parser {
@@ -12,9 +8,9 @@ public class Parser {
     //String = action
     //State, nonterminal ->shift,reduce, acc
     //State,terminal->goto?
-    private Map<Pair<State, String>, String> table;
-    private Grammar grammar;
-    private String newStartSymbol;
+    Grammar grammar;
+    String newStartSymbol;
+    List<Map<String, String>> table = new ArrayList<>();
 
     public Parser(Grammar grammar) {
         this.grammar = grammar;
@@ -98,6 +94,9 @@ public class Parser {
         List<State> states = new ArrayList<>();
         var firstElem = closure(List.of(initialProduction));
         states.add(firstElem);
+        table.add(new HashMap<>());
+        var x = table.get(0);
+        x.put("action", determineAction(firstElem));
 
         boolean colCanModified = true;
         var allSymbols = new ArrayList<>(grammar.getNonTerminals());
@@ -111,35 +110,53 @@ public class Parser {
                     var newState = goTo(state, symbol);
                     if (!newState.productions.isEmpty()) {
                         if (!states.contains(newState)) {
+                            var stateIndex = states.indexOf(state);
+
+                            var mapLast = new HashMap<String, String>();
+                            mapLast.put("action", determineAction(newState));
+                            table.add(mapLast);
+
+                            var map = table.get(stateIndex);
+                            map.put(symbol, String.valueOf(table.size() - 1));
                             colCanModified = true;
                             statesToAdd.add(newState);
+                        } else {
+                            var stateIndex = states.indexOf(state);
+                            var foundIndex = states.indexOf(newState);
+                            var map = table.get(stateIndex);
+                            map.put(symbol, String.valueOf(foundIndex));
                         }
                     }
                 }
             }
             states.addAll(statesToAdd);
-        }
 
-        this.table = createTable(states);
+
+        }
         return states;
     }
 
-    private Map<Pair<State, String>, String> createTable(List<State> states) {
-        Map<Pair<State, String>, String> table = new HashMap<>();
-
-        for (State state : states) {
-            for (Pair<String, List<String>> production : state.productions) {
-                if(matchesShift(production)){
-
-                } else if (matchesReduce(production)) {
-
-                } else if(matchesAccept(production)){
-
-                }
-
+    private String determineAction(State firstElem) {
+        for(var prod: firstElem.productions){
+            if(matchesShift(prod)){
+                return "shift";
             }
         }
-        return table;
+
+        for (var prod: firstElem.productions) {
+            var res = getReduce(prod);
+            if(res!=-1){
+                return String.valueOf(res);
+            }
+        }
+
+        for (var prod: firstElem.productions) {
+            if(matchesAccept(prod)){
+                return "accept";
+            }
+        }
+        throw new RuntimeException("No action found");
+
     }
 
     private boolean matchesShift(Pair<String, List<String>> production) {
@@ -149,13 +166,24 @@ public class Parser {
 
     }
 
-    private boolean matchesReduce(Pair<String, List<String>> production) {
-        if (!Objects.equals(production.first, newStartSymbol)) {
-            List<String> secondPartProduction = production.second;
-            int dotPosition = secondPartProduction.indexOf(".");
-            return dotPosition == secondPartProduction.size() - 1;
+    private int getReduce(Pair<String, List<String>> production) {
+        if (production.second.contains(".")) {
+            if (!Objects.equals(production.first, newStartSymbol)) {
+                List<String> secondPartProduction = production.second;
+                int dotPosition = secondPartProduction.indexOf(".");
+                if (dotPosition == secondPartProduction.size() - 1) {
+                    List<String> partprodWithoutDot = new ArrayList<>();
+                    secondPartProduction.stream().filter(e -> !e.equals(".")).forEach(partprodWithoutDot::add);
+                    var prodWithoutDot = new Pair<>(production.first, partprodWithoutDot);
+                    int i = grammar.getProductions().indexOf(prodWithoutDot);
+                    if (i == -1) {
+                        System.out.println("Problem with reduce");
+                    }
+                    return i;
+                }
+            }
         }
-        return false;
+        return -1;
     }
 
     private boolean matchesAccept(Pair<String, List<String>> production) {

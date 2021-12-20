@@ -1,21 +1,15 @@
-import domain.Grammar;
-import domain.Pair;
-import domain.State;
-
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        Grammar grammar = Grammar.readFromFile("g1.txt");
+        Grammar grammar = Grammar.readFromFile("gtest.txt");
         grammar.printProductions();
         grammar.printNonTerminals();
         grammar.printTerminals();
         grammar.printProductionsForGivenNonterminal("A");
 
         Parser parser =new Parser(grammar);
-        System.out.println(parser.canonicalCollection());
         var x = parser.canonicalCollection();
         int id =0;
         for (State state: x){
@@ -26,6 +20,19 @@ public class Main {
         System.out.println(parser.closure(List.of(parser.initialProduction)));
         System.out.println(parser.goTo(new State
                 (List.of(new Pair<>("S'",List.of(".","S")), new Pair<>("S",List.of(".","a","A")), new Pair<>("S",List.of(".","a","c")))),"a"));
+
+        System.out.println("\n\n---Parser Output part --- \n\n");
+
+
+        ParserOutput parserOutput = new ParserOutput(parser);
+        System.out.println("0."+parser.initialProduction.first+"->"+String.join("", parser.initialProduction.second));
+        int index = 1;
+        for(var prod: grammar.getProductions()){
+            System.out.println(index+++"."+prod.first+"->"+ String.join("", prod.second));
+        }
+
+        System.out.println(parserOutput.verifySequence(List.of("a","b","b","c")));
+        System.out.println(parserOutput.phi);
     }
 
     private static void printState(State state){
